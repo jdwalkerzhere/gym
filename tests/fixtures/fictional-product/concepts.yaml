@@ -5,4 +5,20 @@
   difficulty: 1
   prerequisites: []
   related: []
-  source_refs: [product/snapshot/docs.md#delivery]
+  source_refs: [docs-core]
+- id: authentication
+  name: Request authentication
+  description: Operations require an authorized identity.
+  importance: high
+  difficulty: 2
+  prerequisites: []
+  related: [auth.token]
+  source_refs: [sdk-client]
+- id: batching
+  name: Batch boundaries
+  description: A batch groups independent parcel submissions.
+  importance: medium
+  difficulty: 3
+  prerequisites: [delivery]
+  related: [parcel.batch]
+  source_refs: [api-spec]

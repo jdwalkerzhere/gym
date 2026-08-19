@@ -1,3 +1,3 @@
 # Engagement
 
-Create an incomplete but internally consistent customer situation requiring discovery before design and implementation. Put hidden ground truth/facilitator material only in the learner-visible exercise file if clearly fenced as judge-only instructions; for V1 prefer a written discovery plan and stated assumptions. Do not steer toward the product. Rejecting it can be correct.
+Create an internally consistent simulated customer environment at the allocated directory. Give incomplete initial context plus only the client fixtures/services, incumbent, evaluation, work area, and facilitator material the situation needs. `facilitator/` is conventionally judge/persona material, not cryptographically hidden. The persona answers what is asked without steering toward the product. Correct conclusions include partial use, retaining the incumbent, further evaluation, or rejection.

@@ -1,0 +1,5 @@
+openapi: 3.0.0
+info: {title: Parcelbox, version: v1}
+paths:
+  /parcels/batch: {}
+  /parcels/{id}/cancel: {}

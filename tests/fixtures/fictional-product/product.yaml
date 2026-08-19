@@ -5,5 +5,5 @@ snapshot:
   captured_at: 2026-08-18T00:00:00Z
 sources:
   - type: documentation
-    location: docs.md
+    location: snapshot/docs.md
     revision: v1

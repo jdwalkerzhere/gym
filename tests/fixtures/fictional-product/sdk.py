@@ -1,0 +1,3 @@
+"""Frozen fictional Parcelbox SDK surface."""
+
+def authenticate(token): ...

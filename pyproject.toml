@@ -1,6 +1,6 @@
 [project]
 name = "product-gym"
-version = "0.1.0"
+version = "0.2.0"
 description = "A file-based, Codex-authored technical product gym"
 requires-python = ">=3.12"
 dependencies = ["PyYAML>=6"]

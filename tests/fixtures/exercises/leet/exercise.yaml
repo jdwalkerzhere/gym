@@ -1,0 +1,19 @@
+gym:
+  schema_version: 2
+  id: leet-0001
+  type: leet
+  created_at: 2026-08-18T00:00:00Z
+  order: 1
+  snapshot: parcelbox-v1
+  capabilities:
+    - id: parcel.batch
+      weight: 1.0
+      demonstrates: {usage: 1.0, edge: 0.5}
+  concepts: [{id: batching}]
+  difficulty: 3
+  selection: {reason: new_surface, detail: runnable bundle fixture}
+  source_refs: [api-spec]
+  validators:
+    - type: command
+      command: [python, grader/check.py]
+      timeout_seconds: 10

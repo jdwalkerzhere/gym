@@ -1,0 +1,24 @@
+snapshot:
+  id: parcelbox-v1
+  captured_at: 2026-08-18T00:00:00Z
+sources:
+  - id: docs-core
+    kind: documentation
+    path: docs.md
+    origin: https://example.invalid/docs/v1
+    revision: v1
+  - id: sdk-client
+    kind: sdk
+    path: sdk.py
+    origin: https://example.invalid/sdk.git
+    revision: abc123
+  - id: api-spec
+    kind: api_spec
+    path: openapi.yaml
+    origin: https://example.invalid/openapi.yaml
+    revision: v1
+  - id: examples-repository
+    kind: repository
+    path: examples
+    origin: https://example.invalid/examples.git
+    revision: def456

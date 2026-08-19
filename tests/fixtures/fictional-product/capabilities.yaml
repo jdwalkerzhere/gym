@@ -5,7 +5,7 @@
   difficulty: 1
   prerequisites: []
   related: [parcel.track]
-  source_refs: [product/snapshot/docs.md#send]
+  source_refs: [docs-core]
 - id: parcel.track
   name: Track a parcel
   description: Inspect current delivery state.
@@ -13,4 +13,28 @@
   difficulty: 1
   prerequisites: [parcel.send]
   related: [parcel.send]
-  source_refs: [product/snapshot/docs.md#track]
+  source_refs: [docs-core]
+- id: parcel.batch
+  name: Batch parcels
+  description: Submit multiple parcels together.
+  importance: medium
+  difficulty: 3
+  prerequisites: [parcel.send]
+  related: [parcel.send]
+  source_refs: [api-spec]
+- id: auth.token
+  name: Authenticate requests
+  description: Supply a token to authorized operations.
+  importance: high
+  difficulty: 2
+  prerequisites: []
+  related: []
+  source_refs: [sdk-client]
+- id: parcel.cancel
+  name: Cancel a parcel
+  description: Cancel an accepted parcel before delivery.
+  importance: medium
+  difficulty: 2
+  prerequisites: [parcel.send]
+  related: [parcel.track]
+  source_refs: [docs-core, api-spec]

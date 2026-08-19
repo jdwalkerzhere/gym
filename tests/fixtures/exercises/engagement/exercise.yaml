@@ -1,0 +1,19 @@
+gym:
+  schema_version: 2
+  id: engagement-0003
+  type: engagement
+  created_at: 2026-08-18T00:00:00Z
+  order: 3
+  snapshot: parcelbox-v1
+  capabilities:
+    - id: parcel.cancel
+      weight: 1.0
+      demonstrates: {transfer: 1.0, tradeoff: 0.8}
+  concepts: [{id: delivery}]
+  difficulty: 5
+  selection: {reason: transfer, detail: engagement-shaped fixture}
+  source_refs: [docs-core, api-spec]
+  validators:
+    - type: command
+      command: [python, evals/check.py]
+      timeout_seconds: 10

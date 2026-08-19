@@ -28,6 +28,7 @@ def init(root: Path, name: str) -> None:
     if config.exists():
         raise SystemExit("product/product.yaml already exists")
     config.write_text(yaml.safe_dump({"product": {"name": name}, "snapshot": {"id": "uninitialized", "captured_at": None}, "sources": []}, sort_keys=False))
+    (product / "snapshot" / "manifest.yaml").write_text(yaml.safe_dump({"snapshot": {"id": "uninitialized", "captured_at": None}, "sources": []}, sort_keys=False))
     for filename in ("concepts.yaml", "capabilities.yaml", "terminology.yaml"):
         (knowledge / filename).write_text("[]\n")
     connect(root).close()
@@ -65,7 +66,12 @@ def main(argv: list[str] | None = None) -> int:
                     return 1
         else:
             data = status(root)
+            if not data["pack_valid"]:
+                print("Product pack: INVALID\n")
+                print("\n".join(f"  {error}" for error in data["pack_errors"]))
+                return 1
             print(f"{data['product']['product']['name']} · snapshot {data['product']['snapshot']['id']}")
+            print("Product pack: valid")
             print(f"{data['concepts_encountered']}/{data['concepts_total']} concepts encountered")
             print(f"{data['capabilities_encountered']}/{data['capabilities_total']} capabilities encountered")
             print("\nopen:")
@@ -73,7 +79,9 @@ def main(argv: list[str] | None = None) -> int:
             print("\ncompleted:")
             print("\n".join(f"  {kind}: {count}" for kind, count in data["completed"].items()))
             if data["weak"]:
-                print("\nweak:\n" + "\n".join(f"  {row['capability_id']} ({row['successes']}/{row['exposures']} successful at {row['exercise_type']}/{row['dimension']})" for row in data["weak"]))
+                print("\nweak:\n" + "\n".join(f"  {row['capability_id']} · {row['exercise_type']}/{row['dimension']}: {row['successes']}/{row['exposures']} successful, highest difficulty {row['highest_successful_difficulty'] or 'none'}" for row in data["weak"]))
+            if data["recurring_failures"]:
+                print("\nrecurring:\n" + "\n".join(f"  {row['capability_id']}: {row['failure_mode']} ({row['count']})" + (f" with {row['related_capability']}" if row['related_capability'] else "") for row in data["recurring_failures"]))
         return 0
     except (ValueError, RuntimeError, FileNotFoundError) as error:
         print(f"gym: {error}", file=sys.stderr)

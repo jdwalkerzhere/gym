@@ -24,10 +24,15 @@ class Codex:
             json.dump(output_schema, schema)
             schema.close()
             command += ["--output-schema", schema.name, "--output-last-message", output.name]
-        completed = subprocess.run([*command, prompt], cwd=self.root, text=True, capture_output=True)
-        if completed.returncode:
-            raise RuntimeError(f"Codex failed ({completed.returncode}): {completed.stderr.strip() or completed.stdout.strip()}")
-        return json.loads(Path(output.name).read_text()) if output else None
+        try:
+            completed = subprocess.run([*command, prompt], cwd=self.root, text=True, capture_output=True)
+            if completed.returncode:
+                raise RuntimeError(f"Codex failed ({completed.returncode}): {completed.stderr.strip() or completed.stdout.strip()}")
+            return json.loads(Path(output.name).read_text()) if output else None
+        finally:
+            for temporary in (output, schema):
+                if temporary:
+                    Path(temporary.name).unlink(missing_ok=True)
 
     def generate(self, prompt: str) -> None:
         self.run(prompt)

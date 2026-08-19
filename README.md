@@ -1,6 +1,6 @@
 # gym
 
-`gym` is a very thin, file-based technical-product training loop:
+`gym` is a thin, file-based technical-product training loop:
 
 ```bash
 gym flash
@@ -8,9 +8,7 @@ $EDITOR exercises/flash/0001-exercise.md
 gym check
 ```
 
-Codex authors one source-grounded exercise. You edit an ordinary file. `gym check` validates open exercises in creation order, records what happened, and stops at the first failure. Later exercises receive that mastery and failure context.
-
-## Four depths
+Codex authors one source-grounded exercise. You edit normal files. `gym check` validates every incomplete exercise in global creation order, records the evidence, and stops at the first failure. Later exercises receive the resulting mastery and failure history.
 
 ```text
 Flash       learn the pieces
@@ -19,7 +17,16 @@ Spec        solve complete requirements
 Engagement  discover and solve the problem
 ```
 
-The same capability can progress from recall through usage, composition, design, edge cases, tradeoffs, and ambiguous transfer. Correct repetition at one level is not treated as higher-level mastery.
+A Flash is normally one Markdown file. Leet, Spec, and Engagement are one directory each and may contain real code, tests, fixtures, mock services, datasets, incumbents, rubrics, facilitator material, and learner work. Each command still creates exactly one exercise root:
+
+```bash
+gym flash
+gym leet
+gym spec
+gym engagement
+gym check
+gym status
+```
 
 ## Start a product gym
 
@@ -30,23 +37,10 @@ uv sync
 uv run gym init "Product name"
 ```
 
-Then give Codex the authoritative docs, SDKs, specifications, examples, or repositories to freeze and ask it to initialize the product by following `AGENTS.md`. Sources are copied into an inspectable snapshot; curriculum YAML points back to them. Nothing refreshes automatically.
+Then give Codex the authoritative documentation, SDKs, specifications, examples, or repositories and ask it to initialize the pack using `AGENTS.md`. It freezes source files or pinned repository trees locally, registers stable source IDs in `product/snapshot/manifest.yaml`, and grounds every concept, capability, and exercise back to that registry. Ordinary generation uses the frozen local snapshot; it does not silently refresh from the web.
 
-```bash
-uv run gym status
-uv run gym flash
-uv run gym leet
-uv run gym spec
-uv run gym engagement
-uv run gym check
-```
+The filesystem owns the product pack, exercise definitions, fixtures, graders, and learner work. `.gym/mastery.sqlite` owns attempts, completion, classified failures, and evidence by capability, learning dimension, difficulty, and weight. Deleting SQLite loses learner history, not the curriculum.
 
-Each generation command creates exactly one exercise. Multiple exercises may be open; checking always uses their global creation order. Completed files stay where they are.
-
-## Ownership
-
-The repository files are the product pack and workspace: frozen sources, concepts, capabilities, provenance, exercises, fixtures, rubrics, and answers. SQLite at `.gym/mastery.sqlite` holds attempts, scores, classified failures, recency, depth, compositions, and edge observations. Deleting it loses learning history, not the curriculum.
-
-Codex invocation defaults to `codex exec` and can be changed with `GYM_CODEX_COMMAND`. Long authoring and judging instructions live in `prompts/`, not Python. Automated tests inject a fake adapter and never call Codex.
+Command validators can run any exercise-owned tool with a working directory, timeout, and declared environment-variable requirements. LLM validators cover semantic artifacts; ordered validators combine both. The engine has no product-, language-, SDK-, API-, or runtime-specific logic.
 
 V1 intentionally has no web/TUI, accounts, sync, crawler, reference solutions, scheduler, graph/vector database, or plugin system.

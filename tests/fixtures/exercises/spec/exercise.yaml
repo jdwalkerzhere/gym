@@ -1,0 +1,19 @@
+gym:
+  schema_version: 2
+  id: spec-0002
+  type: spec
+  created_at: 2026-08-18T00:00:00Z
+  order: 2
+  snapshot: parcelbox-v1
+  capabilities:
+    - id: parcel.track
+      weight: 1.0
+      demonstrates: {selection: 1.0, tradeoff: 0.5}
+  concepts: [{id: delivery}]
+  difficulty: 4
+  selection: {reason: depth_progression, detail: executable spec fixture}
+  source_refs: [docs-core]
+  validators:
+    - type: command
+      command: [python, grader/check.py]
+      timeout_seconds: 10
