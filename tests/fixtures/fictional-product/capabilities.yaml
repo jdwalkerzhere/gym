@@ -1,0 +1,16 @@
+- id: parcel.send
+  name: Send a parcel
+  description: Submit a parcel for delivery.
+  importance: high
+  difficulty: 1
+  prerequisites: []
+  related: [parcel.track]
+  source_refs: [product/snapshot/docs.md#send]
+- id: parcel.track
+  name: Track a parcel
+  description: Inspect current delivery state.
+  importance: medium
+  difficulty: 1
+  prerequisites: [parcel.send]
+  related: [parcel.send]
+  source_refs: [product/snapshot/docs.md#track]

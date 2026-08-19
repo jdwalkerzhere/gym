@@ -1,0 +1,8 @@
+- id: delivery
+  name: Delivery lifecycle
+  description: The states of a parcel delivery.
+  importance: high
+  difficulty: 1
+  prerequisites: []
+  related: []
+  source_refs: [product/snapshot/docs.md#delivery]

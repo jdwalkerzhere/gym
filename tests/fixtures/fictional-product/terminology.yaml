@@ -1,0 +1,3 @@
+- term: parcel
+  meaning: An item accepted for delivery.
+  source_refs: [product/snapshot/docs.md]

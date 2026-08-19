@@ -1,0 +1,9 @@
+product:
+  name: Parcelbox
+snapshot:
+  id: parcelbox-v1
+  captured_at: 2026-08-18T00:00:00Z
+sources:
+  - type: documentation
+    location: docs.md
+    revision: v1
