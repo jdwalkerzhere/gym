@@ -1,6 +1,6 @@
 # gym
 
-`gym` is a thin, file-based technical-product training loop:
+`gym` is the center for kids who can't read good and who wanna learn to do other stuff good too.
 
 ```bash
 gym flash
