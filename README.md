@@ -25,6 +25,7 @@ gym leet
 gym spec
 gym engagement
 gym check
+gym check --verbose  # include judge feedback and mastery observations
 gym status
 ```
 

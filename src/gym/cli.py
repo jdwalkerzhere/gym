@@ -40,7 +40,8 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="command", required=True)
     for kind in TYPES:
         sub.add_parser(kind, help=f"create one {kind} exercise")
-    sub.add_parser("check", help="check open exercises in creation order")
+    check_parser = sub.add_parser("check", help="check open exercises in creation order")
+    check_parser.add_argument("-v", "--verbose", action="store_true", help="show judge feedback and mastery observations")
     sub.add_parser("status", help="show coverage and learner state")
     init_parser = sub.add_parser("init", help="initialize an empty product pack")
     init_parser.add_argument("name")
@@ -61,8 +62,18 @@ def main(argv: list[str] | None = None) -> int:
                 print("no open exercises")
             for item, result in results:
                 print(f"{'✓' if result['passed'] else '✗'} {item['id']}")
+                if args.verbose:
+                    print(f"  score: {result['score']}")
+                    if result.get("summary"):
+                        print(f"  feedback: {result['summary']}")
+                    for observation in result.get("capability_observations", []):
+                        print(f"  observation: {observation['capability_id']} · {observation.get('result', 'unknown')}/{observation.get('dimension', 'basic')}")
+                    for failure in result.get("failure_modes", []):
+                        print(f"  failure: {failure}")
                 if not result["passed"]:
-                    print(f"\n{result['summary']}\n\nStopped at first failure.")
+                    if not args.verbose:
+                        print(f"\n{result['summary']}")
+                    print("\nStopped at first failure.")
                     return 1
         else:
             data = status(root)

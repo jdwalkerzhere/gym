@@ -38,13 +38,31 @@ class Codex:
         self.run(prompt)
 
     def judge(self, prompt: str) -> dict:
+        observation_properties = {
+            "capability_id": {"type": "string"},
+            "result": {"type": "string", "enum": ["success", "partial", "failed"]},
+            "dimension": {"type": "string", "enum": ["recognition", "recall", "basic", "usage", "composition", "selection", "transfer", "tradeoff", "edge"]},
+            "score": {"type": ["number", "null"]},
+            "weight": {"type": ["number", "null"]},
+            "failure_modes": {"type": ["array", "null"], "items": {"type": "string"}},
+            "edge_case": {"type": ["string", "null"]},
+            "related_capability": {"type": ["string", "null"]},
+        }
         schema = {
             "type": "object", "additionalProperties": False,
             "required": ["passed", "score", "summary", "capability_observations", "failure_modes"],
             "properties": {
                 "passed": {"type": "boolean"}, "score": {"type": "number"}, "summary": {"type": "string"},
-                "capability_observations": {"type": "array", "items": {"type": "object"}},
+                "capability_observations": {"type": "array", "items": {
+                    "type": "object", "additionalProperties": False,
+                    "required": list(observation_properties), "properties": observation_properties,
+                }},
                 "failure_modes": {"type": "array", "items": {"type": "string"}},
             },
         }
-        return self.run(prompt, schema) or {}
+        result = self.run(prompt, schema) or {}
+        for observation in result.get("capability_observations", []):
+            for key in tuple(observation):
+                if observation[key] is None:
+                    del observation[key]
+        return result

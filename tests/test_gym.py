@@ -11,6 +11,7 @@ import pytest
 import yaml
 
 from gym.cli import main
+from gym.codex import Codex
 from gym.core import check, generate, status, validate
 from gym.db import completed_ids, connect, mastery_context
 from gym.exercises import discover, read_exercise
@@ -18,6 +19,27 @@ from gym.product import preflight
 
 FIXTURE = Path(__file__).parent / "fixtures" / "fictional-product"
 KINDS = ("flash", "leet", "spec", "engagement")
+
+
+def test_judge_schema_is_strict_for_nested_observations(tmp_path):
+    class CaptureCodex(Codex):
+        def run(self, prompt, output_schema=None):
+            self.schema = output_schema
+            return {
+                "passed": True, "score": 1, "summary": "ok", "failure_modes": [],
+                "capability_observations": [{
+                    "capability_id": "x", "result": "success", "dimension": "usage",
+                    "score": None, "weight": None, "failure_modes": None,
+                    "edge_case": None, "related_capability": None,
+                }],
+            }
+
+    codex = CaptureCodex(tmp_path)
+    result = codex.judge("judge")
+    item = codex.schema["properties"]["capability_observations"]["items"]
+    assert item["additionalProperties"] is False
+    assert set(item["required"]) == set(item["properties"])
+    assert result["capability_observations"] == [{"capability_id": "x", "result": "success", "dimension": "usage"}]
 
 
 def repo(tmp_path: Path) -> Path:
@@ -305,6 +327,21 @@ def test_status_health_and_cli_remain_thin(monkeypatch, tmp_path, capsys):
     monkeypatch.chdir(root)
     assert main(["status"]) == 1
     assert "Product pack: INVALID" in capsys.readouterr().out
+
+
+def test_check_verbose_prints_judge_feedback(monkeypatch, tmp_path, capsys):
+    root = repo(tmp_path)
+    monkeypatch.chdir(root)
+    result = {
+        "passed": True, "score": 0.8, "summary": "Good namespace selection.",
+        "capability_observations": [{"capability_id": "parcel.send", "result": "success", "dimension": "usage"}],
+        "failure_modes": [],
+    }
+    monkeypatch.setattr("gym.cli.check", lambda root: [({"id": "flash-0001"}, result)])
+    assert main(["check", "--verbose"]) == 0
+    output = capsys.readouterr().out
+    assert "feedback: Good namespace selection." in output
+    assert "observation: parcel.send · success/usage" in output
 
 
 def test_existing_v1_database_migrates_additively(tmp_path):

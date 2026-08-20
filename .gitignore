@@ -1,4 +1,11 @@
 .gym/
+.venv/
 __pycache__/
 .pytest_cache/
-*.pyc
+.mypy_cache/
+.ruff_cache/
+*.py[cod]
+.env
+.env.*
+!.env.example
+.DS_Store
